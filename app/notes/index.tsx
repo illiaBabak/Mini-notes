@@ -1,3 +1,5 @@
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 import { Note } from "@/types";
 import { useState } from "react";
 import {
@@ -10,12 +12,13 @@ import {
   ScrollView,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import "react-native-get-random-values";
-import { v4 as uuidv4 } from "uuid";
+
+// TODO: EDIT, ASYNC STORAGE, REFACTORING, JEST, README
 
 const Notes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [shouldShowModal, setShouldShowModal] = useState(false);
+  const [noteIdToEdit, setNoteIdToEdit] = useState<string | null>(null);
 
   const [title, setTitle] = useState("");
   const [type, setType] = useState<"important" | "normal">("normal");
@@ -32,17 +35,27 @@ const Notes = () => {
 
       <ScrollView style={styles.scrollViewNotes}>
         {notes.map((note) => (
-          <View key={`note-${note.id}`} style={styles.note}>
-            <TouchableOpacity
-              onPress={() => setNotes(notes.filter((n) => n.id !== note.id))}
-              style={styles.closeButton}
-            >
-              <Text style={styles.closeButtonText}>x</Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setNoteIdToEdit(note.id);
+              setShouldShowModal(true);
+              setTitle(note.title);
+              setType(note.type);
+            }}
+            key={`note-${note.id}`}
+          >
+            <View style={styles.note}>
+              <TouchableOpacity
+                onPress={() => setNotes(notes.filter((n) => n.id !== note.id))}
+                style={styles.closeButton}
+              >
+                <Text style={styles.closeButtonText}>x</Text>
+              </TouchableOpacity>
 
-            <Text>{note.title}</Text>
-            <Text>{note.type}</Text>
-          </View>
+              <Text>{note.title}</Text>
+              <Text>{note.type}</Text>
+            </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
 
@@ -50,19 +63,25 @@ const Notes = () => {
         visible={shouldShowModal}
         animationType="slide"
         transparent={true}
-        onRequestClose={() => setShouldShowModal(false)}
+        onRequestClose={() => {
+          setShouldShowModal(false);
+          setNoteIdToEdit(null);
+        }}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <TouchableOpacity
               style={styles.closeButton}
-              onPress={() => setShouldShowModal(false)}
+              onPress={() => {
+                setShouldShowModal(false);
+                setNoteIdToEdit(null);
+              }}
             >
               <Text style={styles.closeButtonText}>×</Text>
             </TouchableOpacity>
 
             <View style={styles.label}>
-              <Text>Title: </Text>
+              <Text>{!!noteIdToEdit ? "Edit" : ""} Title: </Text>
               <TextInput
                 style={styles.modalInput}
                 value={title}
@@ -86,21 +105,31 @@ const Notes = () => {
             <TouchableOpacity
               style={[
                 styles.button,
-                !title.length && {
+                !title.trim().length && {
                   opacity: 0.5,
                   pointerEvents: "none",
                   backgroundColor: "#555",
                 },
               ]}
               onPress={() => {
-                setNotes([...notes, { title, type, id: uuidv4() }]);
+                if (noteIdToEdit)
+                  setNotes(
+                    notes.map((note) =>
+                      note.id === noteIdToEdit ? { ...note, title, type } : note
+                    )
+                  );
+                else setNotes([...notes, { title, type, id: uuidv4() }]);
+
                 setTitle("");
                 setType("normal");
+                setNoteIdToEdit(null);
                 setShouldShowModal(false);
               }}
-              disabled={!title.length}
+              disabled={!title.trim().length}
             >
-              <Text style={styles.buttonText}>Add</Text>
+              <Text style={styles.buttonText}>
+                {noteIdToEdit ? "Edit" : "Add"}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -149,6 +178,7 @@ const styles = StyleSheet.create({
     height: "40%",
     width: "80%",
     position: "relative",
+    boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.5)",
   },
   modalInput: {
     borderWidth: 1,
