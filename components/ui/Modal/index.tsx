@@ -19,6 +19,7 @@ type ModalProps = {
   setNoteToEdit: React.Dispatch<React.SetStateAction<Note | null>>;
   notes: Note[];
   setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
+  testID?: string;
 };
 
 export const NoteModal = ({
@@ -28,6 +29,7 @@ export const NoteModal = ({
   setNoteToEdit,
   notes,
   setNotes,
+  testID,
 }: ModalProps) => {
   const [title, setTitle] = useState("");
   const [type, setType] = useState<"important" | "normal">("normal");
@@ -39,9 +41,9 @@ export const NoteModal = ({
     }
   }, [noteToEdit]);
 
-  console.log(noteToEdit, title, type);
   return (
     <Modal
+      testID={testID}
       visible={shouldShowModal}
       animationType="slide"
       transparent={true}
@@ -50,9 +52,10 @@ export const NoteModal = ({
         setNoteToEdit(null);
       }}
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
+      <View testID="modal-container" style={styles.modalContainer}>
+        <View testID="modal-content" style={styles.modalContent}>
           <TouchableOpacity
+            testID="modal-close-button"
             style={styles.closeButton}
             onPress={() => {
               setShouldShowModal(false);
@@ -62,19 +65,21 @@ export const NoteModal = ({
             <Text style={styles.closeButtonText}>×</Text>
           </TouchableOpacity>
 
-          <View style={styles.label}>
+          <View testID="title-input-container" style={styles.label}>
             <Text>{noteToEdit ? "Edit" : ""} Title: </Text>
             <TextInput
+              testID="note-title-input"
               style={styles.modalInput}
               value={title}
               onChangeText={setTitle}
             />
           </View>
 
-          <View style={styles.label}>
+          <View testID="type-picker-container" style={styles.label}>
             <Text>Type: </Text>
 
             <Picker
+              testID="note-type-picker"
               selectedValue={type}
               onValueChange={(value) => setType(value)}
               style={styles.picker}
@@ -85,6 +90,7 @@ export const NoteModal = ({
           </View>
 
           <TouchableOpacity
+            testID="modal-submit-button"
             style={[
               styles.button,
               !title.trim().length && {

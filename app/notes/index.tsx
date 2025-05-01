@@ -10,8 +10,6 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NoteModal } from "@/components/ui/Modal";
 
-// TODO: JEST, README
-
 const Notes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [shouldShowModal, setShouldShowModal] = useState(false);
@@ -49,17 +47,21 @@ const Notes = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>My notes</Text>
+      <Text testID="notes-title" style={styles.title}>
+        My notes
+      </Text>
       <TouchableOpacity
+        testID="add-note-button"
         style={styles.button}
         onPress={() => setShouldShowModal(true)}
       >
         <Text style={styles.buttonText}>Add note</Text>
       </TouchableOpacity>
 
-      <ScrollView style={styles.scrollViewNotes}>
+      <ScrollView testID="notes-list" style={styles.scrollViewNotes}>
         {notes.map((note) => (
           <TouchableOpacity
+            testID={`note-${note.id}`}
             onPress={() => {
               setNoteToEdit(note);
               setShouldShowModal(true);
@@ -68,20 +70,22 @@ const Notes = () => {
           >
             <View style={styles.note}>
               <TouchableOpacity
+                testID={`delete-note-${note.id}`}
                 onPress={() => setNotes(notes.filter((n) => n.id !== note.id))}
                 style={styles.closeButton}
               >
                 <Text style={styles.closeButtonText}>x</Text>
               </TouchableOpacity>
 
-              <Text>{note.title}</Text>
-              <Text>{note.type}</Text>
+              <Text testID={`note-title-${note.id}`}>{note.title}</Text>
+              <Text testID={`note-type-${note.id}`}>{note.type}</Text>
             </View>
           </TouchableOpacity>
         ))}
       </ScrollView>
 
       <NoteModal
+        testID="note-modal"
         shouldShowModal={shouldShowModal}
         setShouldShowModal={setShouldShowModal}
         noteToEdit={noteToEdit}

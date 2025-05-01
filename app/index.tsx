@@ -9,7 +9,9 @@ const App = () => {
         style={styles.button}
         onPress={() => router.push("/notes")}
       >
-        <Text style={styles.buttonText}>Go to notes</Text>
+        <Text testID="go-to-notes-button" style={styles.buttonText}>
+          Go to notes
+        </Text>
       </TouchableOpacity>
     </View>
   );
