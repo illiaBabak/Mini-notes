@@ -1,7 +1,7 @@
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import { Note } from "@/types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,8 +12,9 @@ import {
   ScrollView,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// TODO: EDIT, ASYNC STORAGE, REFACTORING, JEST, README
+// TODO: REFACTORING, JEST, README
 
 const Notes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -22,6 +23,36 @@ const Notes = () => {
 
   const [title, setTitle] = useState("");
   const [type, setType] = useState<"important" | "normal">("normal");
+
+  const saveNotesToStorage = async (notes: Note[]) => {
+    try {
+      const jsonValue = JSON.stringify(notes);
+
+      await AsyncStorage.setItem("@notes", jsonValue);
+    } catch (e) {
+      console.error("Error saving notes", e);
+    }
+  };
+
+  const loadNotesFromStorage = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("@notes");
+
+      if (!jsonValue) return;
+
+      setNotes(JSON.parse(jsonValue));
+    } catch (e) {
+      console.error("Error loading notes", e);
+    }
+  };
+
+  useEffect(() => {
+    loadNotesFromStorage();
+  }, []);
+
+  useEffect(() => {
+    saveNotesToStorage(notes);
+  }, [notes]);
 
   return (
     <View style={styles.container}>
