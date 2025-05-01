@@ -1,28 +1,21 @@
-import "react-native-get-random-values";
-import { v4 as uuidv4 } from "uuid";
 import { Note } from "@/types";
 import { useState, useEffect } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
-  Modal,
-  TextInput,
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NoteModal } from "@/components/ui/Modal";
 
-// TODO: REFACTORING, JEST, README
+// TODO: JEST, README
 
 const Notes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [shouldShowModal, setShouldShowModal] = useState(false);
-  const [noteIdToEdit, setNoteIdToEdit] = useState<string | null>(null);
-
-  const [title, setTitle] = useState("");
-  const [type, setType] = useState<"important" | "normal">("normal");
+  const [noteToEdit, setNoteToEdit] = useState<Note | null>(null);
 
   const saveNotesToStorage = async (notes: Note[]) => {
     try {
@@ -68,10 +61,8 @@ const Notes = () => {
         {notes.map((note) => (
           <TouchableOpacity
             onPress={() => {
-              setNoteIdToEdit(note.id);
+              setNoteToEdit(note);
               setShouldShowModal(true);
-              setTitle(note.title);
-              setType(note.type);
             }}
             key={`note-${note.id}`}
           >
@@ -90,81 +81,14 @@ const Notes = () => {
         ))}
       </ScrollView>
 
-      <Modal
-        visible={shouldShowModal}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => {
-          setShouldShowModal(false);
-          setNoteIdToEdit(null);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => {
-                setShouldShowModal(false);
-                setNoteIdToEdit(null);
-              }}
-            >
-              <Text style={styles.closeButtonText}>×</Text>
-            </TouchableOpacity>
-
-            <View style={styles.label}>
-              <Text>{!!noteIdToEdit ? "Edit" : ""} Title: </Text>
-              <TextInput
-                style={styles.modalInput}
-                value={title}
-                onChangeText={setTitle}
-              />
-            </View>
-
-            <View style={styles.label}>
-              <Text>Type: </Text>
-
-              <Picker
-                selectedValue={type}
-                onValueChange={(value) => setType(value)}
-                style={styles.picker}
-              >
-                <Picker.Item label="Normal" value="normal" />
-                <Picker.Item label="Important" value="important" />
-              </Picker>
-            </View>
-
-            <TouchableOpacity
-              style={[
-                styles.button,
-                !title.trim().length && {
-                  opacity: 0.5,
-                  pointerEvents: "none",
-                  backgroundColor: "#555",
-                },
-              ]}
-              onPress={() => {
-                if (noteIdToEdit)
-                  setNotes(
-                    notes.map((note) =>
-                      note.id === noteIdToEdit ? { ...note, title, type } : note
-                    )
-                  );
-                else setNotes([...notes, { title, type, id: uuidv4() }]);
-
-                setTitle("");
-                setType("normal");
-                setNoteIdToEdit(null);
-                setShouldShowModal(false);
-              }}
-              disabled={!title.trim().length}
-            >
-              <Text style={styles.buttonText}>
-                {noteIdToEdit ? "Edit" : "Add"}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+      <NoteModal
+        shouldShowModal={shouldShowModal}
+        setShouldShowModal={setShouldShowModal}
+        noteToEdit={noteToEdit}
+        setNoteToEdit={setNoteToEdit}
+        notes={notes}
+        setNotes={setNotes}
+      />
     </View>
   );
 };
@@ -194,40 +118,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContent: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    padding: 12,
-    borderRadius: 10,
-    height: "40%",
-    width: "80%",
-    position: "relative",
-    boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.5)",
-  },
-  modalInput: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 10,
-    width: "80%",
-    zIndex: 2,
-  },
-  label: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  picker: {
-    width: "80%",
-    height: 110,
-    transform: [{ translateY: "-50%" }],
-    marginTop: 20,
   },
   closeButton: {
     position: "absolute",
