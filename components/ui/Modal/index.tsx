@@ -7,6 +7,7 @@ import {
   TextInput,
   Modal,
   StyleSheet,
+  Animated,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useState, useEffect } from "react";
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     width: "80%",
-    zIndex: 2,
+    zIndex: 3,
   },
   label: {
     flexDirection: "row",
@@ -154,9 +155,8 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: "80%",
-    height: 110,
-    transform: [{ translateY: "-50%" }],
-    marginTop: 20,
+    maXheight: 20,
+    zIndex: 1,
   },
   closeButton: {
     position: "absolute",
