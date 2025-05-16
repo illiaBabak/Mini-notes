@@ -7,7 +7,6 @@ import {
   TextInput,
   Modal,
   StyleSheet,
-  Animated,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useState, useEffect } from "react";
@@ -155,7 +154,6 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: "80%",
-    maXheight: 20,
     zIndex: 1,
   },
   closeButton: {

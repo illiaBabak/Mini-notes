@@ -9,13 +9,18 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.illiababak.mininotes",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.illiababak.mininotes"
     },
     "web": {
       "bundler": "metro",
@@ -40,6 +45,12 @@
     "extra": {
       "expo-router": {
         "appRoot": "./app"
+      },
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "e0c5e991-8208-4aba-992b-e424ac5db746"
       }
     }
   }
