@@ -1,4 +1,28 @@
-# Welcome to your Expo app 👋
+<div align="center">
+
+# Technological stack
+
+This project was written in React Native using Expo, Typescript and Jest
+
+<img src="https://cdn.freebiesupply.com/logos/large/2x/react-1-logo-png-transparent.png" alt="React" width="75" height="75" style="object-fit: cover;">
+<img src="https://play-lh.googleusercontent.com/algsmuhitlyCU_Yy3IU7-7KYIhCBwx5UJG4Bln-hygBjjlUVCiGo1y8W5JNqYm9WW3s" alt="Expo" width="75" height="75" style="object-fit: cover;">
+<img src="https://static-00.iconduck.com/assets.00/typescript-icon-icon-1024x1024-vh3pfez8.png" alt="TypeScript" width="75" height="75" style="object-fit: cover;">
+<img src="https://static-00.iconduck.com/assets.00/jest-icon-1855x2048-ifiupldr.png" alt="Jest" width="75" height="75" style="object-fit: cover;">
+
+# Mini-notes
+
+This web application is written to learn how to work with React Native, Expo and Jest
+
+<img src="https://docs.google.com/uc?id=1q4IQHhLcJxBvwPxD5FyZVnoxDsYTTfaA" alt="Jest" width="270" height="520" style="object-fit: cover;">
+
+<i>Page view</i>
+
+## Operations that can be performed
+
+<p>Create, delete and edit notes</p>
+<p>Save notes to AsyncStorage</p>
+
+<hr/>
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
@@ -48,3 +72,5 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+</div>
