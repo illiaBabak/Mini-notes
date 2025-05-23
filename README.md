@@ -13,7 +13,7 @@ This project was written in React Native using Expo, Typescript and Jest
 
 This web application is written to learn how to work with React Native, Expo and Jest
 
-<img src="https://docs.google.com/uc?id=1q4IQHhLcJxBvwPxD5FyZVnoxDsYTTfaA" alt="Jest" width="270" height="520" style="object-fit: cover;">
+<img src="https://docs.google.com/uc?id=1q4IQHhLcJxBvwPxD5FyZVnoxDsYTTfaA" alt="page-view" width="250" height="520" style="object-fit: cover;">
 
 <i>Page view</i>
 
